@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Shailey Hardware POS</title>
-    
-    <link rel="manifest" href="./manifest.json">
-    
-    <style>
-    </head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shailey Hardware POS</title>
@@ -502,29 +496,8 @@
             updateTimer();
             timerInterval = setInterval(updateTimer, 1000);
         }
-  
-        // Initialize the app
-        // ... existing timer logic ...
-// ---------------------------------
-// --- PWA Service Worker Registration ---
-// ---------------------------------
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        // IMPORTANT: Update the scope path below!
-        navigator.serviceWorker.register('/REPO_NAME/service-worker.js', { scope: '/REPO_NAME/' })
-        .then(registration => {
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }, err => {
-            console.log('ServiceWorker registration failed: ', err);
-        });
-    });
-}
-// ---------------------------------
 
-// Initialize the app
-document.addEventListener('DOMContentLoaded', () => {
-    // ... existing initialization code ...
-});
+        // Initialize the app
         document.addEventListener('DOMContentLoaded', () => {
             loadTransactions(); 
             updateDisplay();

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shailey Hardware UPI POS</title>
+    <style>
+        /* CSS for the POS App Layout */
+        body { 
+            font-family: 'Arial', sans-serif; 
+            max-width: 450px; 
+            margin: 30px auto; 
+            padding: 25px; 
+            border: 1px solid #ddd; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-weight: bold;
+            color: #333;
+        }
+        input, button { 
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 15px; 
+            box-sizing: border-box; 
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="number"] {
+            font-size: 1.1em;
+        }
+        button { 
+            background-color: #28a745; /* Green for payment action */
+            color: white; 
+            border: none; 
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+        }
+        button:hover { 
+            background-color: #218838; 
+        }
+        #qrCodeContainer { 
+            text-align: center; 
+            margin-top: 30px; 
+            padding: 20px; 
+            border: 2px solid #007bff; 
+            border-radius: 8px;
+            background-color: #fff;
+        }
+        #qrCodeContainer img { 
+            max-width: 100%; 
+            height: auto;
+            border: 1px solid #eee;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🛒 Shailey Hardware POS</h1>
+    <p>Enter the sale amount and note to generate the dynamic UPI QR Code.</p>
+
+    <label for="amount">Transaction Amount (INR):</label>
+    <input type="number" id="amount" placeholder="e.g., 100.50" step="0.01" required>
+
+    <label for="note">Transaction Note:</label>
+    <input type="text" id="note" placeholder="e.g., Invoice #1234" maxlength="50">
+
+    <button onclick="generateQrCode()">✅ Generate UPI QR Code</button>
+
+    <div id="qrCodeContainer">
+        <p>The **₹** amount will be pre-filled when the customer scans the QR code.</p>
+        
+
+[Image of UPI QR code]
+
+    </div>
+
+    <script>
+        // 1. Merchant Details (UPDATED)
+        // NOTE: Q37082898 must be followed by a valid UPI handle (e.g., @ybl, @okicici) to work.
+        // I have used a placeholder handle (@ybl) below. Please confirm the correct one.
+        const YOUR_UPI_ID = "Q37082898@ybl"; 
+        const YOUR_MERCHANT_NAME = "Shailey hardware";
+
+        /**
+         * Constructs a standard UPI Deep Link URL.
+         * Format: upi://pay?pa=VPA&pn=PayeeName&am=Amount&cu=Currency&tn=Note
+         */
+        function createUpiDeepLink(amount, note) {
+            if (!YOUR_UPI_ID.includes('@') || !YOUR_MERCHANT_NAME) {
+                alert("ERROR: Please set a valid UPI ID (must contain @) and Merchant Name in the script.");
+                return null;
+            }
+            
+            // Ensure amount is a valid positive number
+            const finalAmount = parseFloat(amount).toFixed(2);
+            if (isNaN(finalAmount) || finalAmount <= 0) {
+                alert("Please enter a valid amount.");
+                return null;
+            }
+            
+            // Encode parameters for the URL
+            const payeeNameEncoded = encodeURIComponent(YOUR_MERCHANT_NAME);
+            const noteEncoded = encodeURIComponent(note.substring(0, 80)); 
+            
+            // Construct the UPI link
+            const upiLink = `upi://pay?pa=${YOUR_UPI_ID}&pn=${payeeNameEncoded}&am=${finalAmount}&cu=INR&tn=${noteEncoded}`;
+            
+            return upiLink;
+        }
+
+        /**
+         * Generates and displays the QR Code using a public API.
+         */
+        function generateQrCode() {
+            const amountInput = document.getElementById('amount').value;
+            const noteInput = document.getElementById('note').value;
+            const qrContainer = document.getElementById('qrCodeContainer');
+
+            const upiLink = createUpiDeepLink(amountInput, noteInput);
+
+            if (upiLink) {
+                // Use the qrserver API to generate the QR image
+                const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
+
+                // Update the container
+                qrContainer.innerHTML = `
+                    <img src="${qrApiUrl}" alt="UPI QR Code for ${amountInput} INR">
+                    <p style="font-size: 1.2em; font-weight: bold;">Scan to Pay ₹${parseFloat(amountInput).toFixed(2)}</p>
+                    <p style="font-size: small; color: #666;">Payee: ${YOUR_MERCHANT_NAME}</p>
+                    <p style="font-size: small; color: #666;">Note: ${noteInput || 'No note provided'}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

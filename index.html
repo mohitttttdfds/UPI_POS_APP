@@ -93,6 +93,8 @@
             gap: 8px; 
             margin-bottom: 20px;
         }
+        
+        /* Keypad Buttons */
         .keypad-grid button {
             background-color: #f7f7f7;
             color: var(--text-color);
@@ -102,13 +104,22 @@
             font-size: 1.6em; 
             font-weight: 600;
             cursor: pointer;
+            transition: background-color 0.05s ease; /* For visual feedback */
         }
+        /* Visual Feedback Implementation (Point 3) */
+        .keypad-grid button:active { 
+            background-color: #e0e0e0;
+        }
+
         .keypad-grid button.backspace-key {
             background-color: #dc3545;
             color: white;
             font-size: 1.4em;
         }
-        
+        .keypad-grid button.backspace-key:active {
+            background-color: #c82333;
+        }
+
         /* Generate Button */
         .primary-btn { 
             background-color: var(--primary-color);
@@ -119,6 +130,24 @@
             border-radius: 6px;
             font-size: 1.2em;
             font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Input Group for Note */
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
         }
 
         /* --- 4. QR SCREEN STYLES --- */
@@ -142,6 +171,7 @@
         #qrCodeContainer img { 
             max-width: 200px; 
             width: 100%;
+            border: 1px solid #ccc; /* Add border for visibility/error state */
         }
         
         /* Timer below QR */
@@ -272,6 +302,7 @@
         }
 
         // --- KEYPAD INPUT LOGIC ---
+        // (Note: Keypad now only affects currentAmount. Note input is separate - per Point 2)
 
         function updateDisplay() {
             const display = document.getElementById('amountDisplay');
@@ -291,7 +322,9 @@
             }
             
             const amountParts = displayValue.split('.');
-            const integer = parseInt(amountParts[0], 10);
+            // Handle parsing potential '0.' or just '.'
+            const integerPart = amountParts[0] === '' ? '0' : amountParts[0]; 
+            const integer = parseInt(integerPart, 10);
             const formattedInteger = new Intl.NumberFormat('en-IN').format(integer);
 
             let formatted = `₹${formattedInteger}`;
@@ -305,12 +338,14 @@
         }
 
         function appendAmount(value) {
+            // Amount validation logic remains the same
             if (value === '.') {
                 if (currentAmount.includes('.')) return;
             }
             
             if (currentAmount.includes('.') && currentAmount.split('.')[1].length >= 2) return;
             
+            // Limit integer part length to 10 digits
             if (!currentAmount.includes('.') && currentAmount.replace('.', '').length >= 10) return; 
 
             if (currentAmount === '0' && value !== '.') {
@@ -348,7 +383,7 @@
                 amount: parseFloat(amount).toFixed(2), 
                 note: note || 'No note',
                 timestamp: timestamp,
-                status: 'Logged', // Status now just a descriptive log
+                status: 'Logged',
             };
             transactions.unshift(newTxn); 
             localStorage.setItem('upi_pos_transactions', JSON.stringify(transactions));
@@ -371,7 +406,6 @@
                     hour: '2-digit', minute: '2-digit', year: 'numeric', month: 'short', day: '2-digit'
                 });
                 
-                // NO STATUS BADGE IS RENDERED HERE
                 li.innerHTML = `
                     <div class="txn-info">
                         <span>${formattedAmount} (${txn.note})</span>
@@ -450,21 +484,37 @@
                 saveTransaction(amount, note, timestamp); 
                 
                 showScreen('qr');
-                generateQrCode(upiLink, amount, note);
+                generateQrCode(upiLink, amount);
                 startCountdown();
             }
         }
 
-        function generateQrCode(upiLink, amount, note) {
+        function handleQrError() {
+            // Error Handling Implementation (Point 4)
+            const qrContainer = document.getElementById('qrCodeContainer');
+            qrContainer.innerHTML = `
+                <p style="color: #dc3545; font-weight: bold;">
+                    ❌ Error: QR Code failed to load. 
+                </p>
+                <p>Please check your internet connection or try a new transaction.</p>
+            `;
+            alert("QR Code API Error. Please check connection.");
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function generateQrCode(upiLink, amount) {
             const qrContainer = document.getElementById('qrCodeContainer');
             const qrAmountDisplay = document.getElementById('qrAmountDisplay');
             const formattedAmount = formatIndianRupees(amount);
 
             qrAmountDisplay.textContent = formattedAmount; 
 
+            // Use the external API
             const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
 
-            qrContainer.innerHTML = `<img src="${qrApiUrl}" alt="UPI QR Code">`;
+            // Error Handling Implementation (Point 4): Added onerror handler
+            qrContainer.innerHTML = `<img src="${qrApiUrl}" alt="UPI QR Code" onerror="handleQrError()">`;
         }
 
         // --- TIMER LOGIC ---

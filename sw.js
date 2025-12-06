@@ -1,14 +1,17 @@
-const CACHE_NAME = 'shailey-pos-cache-v1';
+const CACHE_NAME = 'shailey-pos-v1';
 const urlsToCache = [
-  './',
-  './index.html',
-  './manifest.json',
-  // Add your icon files here if you create them:
-  // './icon-192.png',
-  // './icon-512.png'
+  '/',
+  '/index.html',
+  '/manifest.json',
+  // You must include the paths to your icons here
+  '/icons/icon-72x72.png',
+  '/icons/icon-128x128.png',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png',
+  // Note: External QR API (api.qrserver.com) will not be cached, which is fine.
 ];
 
-// Install Event: Caches all essential assets
+// 1. Install Event: Caches all static assets
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -17,10 +20,9 @@ self.addEventListener('install', event => {
         return cache.addAll(urlsToCache);
       })
   );
-  self.skipWaiting(); // Forces the waiting service worker to become the active one
 });
 
-// Fetch Event: Serves assets from cache first, then network
+// 2. Fetch Event: Intercepts network requests and serves from cache first
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
@@ -29,13 +31,13 @@ self.addEventListener('fetch', event => {
         if (response) {
           return response;
         }
-        // No cache hit - fetch from network
+        // No cache match - perform a network request
         return fetch(event.request);
       })
   );
 });
 
-// Activate Event: Clears old caches
+// 3. Activate Event: Cleans up old caches
 self.addEventListener('activate', event => {
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(

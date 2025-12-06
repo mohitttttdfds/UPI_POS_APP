@@ -1,20 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shailey Hardware POS</title>
     
     <link rel="manifest" href="/manifest.json">
     
     <meta name="theme-color" content="#28a745">
 
-    <style>
-        /* ... existing CSS ... */
-    </style>
-</head>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shailey Hardware POS</title>
     <style>
         /* --- 1. CORE & MOBILE-FIRST STYLES --- */
         :root {
@@ -117,7 +111,7 @@
             cursor: pointer;
             transition: background-color 0.05s ease; /* For visual feedback */
         }
-        /* Visual Feedback Implementation (Point 3) */
+        /* Visual Feedback Implementation */
         .keypad-grid button:active { 
             background-color: #e0e0e0;
         }
@@ -182,7 +176,7 @@
         #qrCodeContainer img { 
             max-width: 200px; 
             width: 100%;
-            border: 1px solid #ccc; /* Add border for visibility/error state */
+            border: 1px solid #ccc; 
         }
         
         /* Timer below QR */
@@ -190,6 +184,17 @@
             font-size: 4em; 
             color: var(--secondary-color);
             margin-top: 10px; 
+        }
+
+        #paymentDetails {
+             font-size: 1.0em; 
+             color: var(--text-color); 
+             padding: 10px; 
+             border: 1px dashed #ccc;
+             border-radius: 6px;
+             text-align: left;
+             width: 100%;
+             max-width: 250px;
         }
         
         /* --- 5. TRANSACTION SCREEN STYLES --- */
@@ -271,7 +276,7 @@
         <p>Time remaining to complete payment:</p>
         <div id="timer">01:30</div>
 
-        <div id="paymentDetails" style="font-size: 1.1em; color: var(--text-color);"></div>
+        <div id="paymentDetails"></div>
 
         <button class="primary-btn" onclick="newTransaction()">
             ➕ New Transaction
@@ -284,9 +289,20 @@
         <ul id="transactionList">
             </ul>
         
-        <button class="secondary-btn" style="width: 100%; margin-top: 20px;" onclick="showScreen('home')">
-            ← Back to POS
-        </button>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button 
+                class="secondary-btn" 
+                style="flex-grow: 1; background-color: #dc3545;" 
+                onclick="clearTransactionHistory()">
+                🗑️ Clear History
+            </button>
+            <button 
+                class="secondary-btn" 
+                style="flex-grow: 1;" 
+                onclick="showScreen('home')">
+                ← Back to POS
+            </button>
+        </div>
     </div>
 
     <script>
@@ -313,7 +329,6 @@
         }
 
         // --- KEYPAD INPUT LOGIC ---
-        // (Note: Keypad now only affects currentAmount. Note input is separate - per Point 2)
 
         function updateDisplay() {
             const display = document.getElementById('amountDisplay');
@@ -349,7 +364,6 @@
         }
 
         function appendAmount(value) {
-            // Amount validation logic remains the same
             if (value === '.') {
                 if (currentAmount.includes('.')) return;
             }
@@ -379,7 +393,7 @@
             updateDisplay();
         }
 
-        // --- TRANSACTION LOGGING ---
+        // --- TRANSACTION LOGGING & HISTORY ---
 
         function loadTransactions() {
             const saved = localStorage.getItem('upi_pos_transactions');
@@ -398,6 +412,15 @@
             };
             transactions.unshift(newTxn); 
             localStorage.setItem('upi_pos_transactions', JSON.stringify(transactions));
+        }
+        
+        function clearTransactionHistory() {
+            if (confirm("⚠️ WARNING: Are you sure you want to permanently delete all transaction history? This cannot be undone.")) {
+                transactions = []; // Clear the array
+                localStorage.removeItem('upi_pos_transactions'); // Clear localStorage
+                renderTransactions(); // Update the displayed list
+                alert("Transaction history cleared!");
+            }
         }
 
         function renderTransactions() {
@@ -459,6 +482,7 @@
             document.getElementById('note').value = ''; 
             
             document.getElementById('qrCodeContainer').innerHTML = "<p>Generating Dynamic QR Code...</p>";
+            document.getElementById('paymentDetails').innerHTML = ""; // Clear details
             showScreen('home');
         }
 
@@ -496,12 +520,17 @@
                 
                 showScreen('qr');
                 generateQrCode(upiLink, amount);
+
+                // Enhancement: Display Merchant and Note
+                document.getElementById('paymentDetails').innerHTML = `
+                    <strong>Merchant:</strong> ${YOUR_MERCHANT_NAME}<br>
+                    <strong>Note:</strong> ${note || 'No Note Provided'}
+                `;
                 startCountdown();
             }
         }
 
         function handleQrError() {
-            // Error Handling Implementation (Point 4)
             const qrContainer = document.getElementById('qrCodeContainer');
             qrContainer.innerHTML = `
                 <p style="color: #dc3545; font-weight: bold;">
@@ -524,7 +553,7 @@
             // Use the external API
             const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
 
-            // Error Handling Implementation (Point 4): Added onerror handler
+            // Added onerror handler for error reporting
             qrContainer.innerHTML = `<img src="${qrApiUrl}" alt="UPI QR Code" onerror="handleQrError()">`;
         }
 
@@ -558,30 +587,25 @@
             timerInterval = setInterval(updateTimer, 1000);
         }
 
-        // Initialize the app
+        // Initialize the app & Register Service Worker (PWA)
         document.addEventListener('DOMContentLoaded', () => {
-        // Initialize the app
-document.addEventListener('DOMContentLoaded', () => {
-    loadTransactions(); 
-    updateDisplay();
-    showScreen('home');
-
-    // --- PWA Service Worker Registration ---
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js')
-                .then(registration => {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }, error => {
-                    console.log('ServiceWorker registration failed: ', error);
-                });
-        });
-    }
-    // ----------------------------------------
-});    
             loadTransactions(); 
             updateDisplay();
             showScreen('home');
+
+            // --- PWA Service Worker Registration ---
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    // Requires sw.js file to be present in the root directory
+                    navigator.serviceWorker.register('/sw.js') 
+                        .then(registration => {
+                            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                        }, error => {
+                            console.log('ServiceWorker registration failed: ', error);
+                        });
+                });
+            }
+            // ----------------------------------------
         });
     </script>
 </body>

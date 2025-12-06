@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>Shailey Hardware POS</title>
+    
+    <link rel="manifest" href="/manifest.json">
+    
+    <meta name="theme-color" content="#28a745">
+
+    <style>
+        /* ... existing CSS ... */
+    </style>
+</head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shailey Hardware POS</title>
@@ -549,6 +560,25 @@
 
         // Initialize the app
         document.addEventListener('DOMContentLoaded', () => {
+        // Initialize the app
+document.addEventListener('DOMContentLoaded', () => {
+    loadTransactions(); 
+    updateDisplay();
+    showScreen('home');
+
+    // --- PWA Service Worker Registration ---
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, error => {
+                    console.log('ServiceWorker registration failed: ', error);
+                });
+        });
+    }
+    // ----------------------------------------
+});    
             loadTransactions(); 
             updateDisplay();
             showScreen('home');

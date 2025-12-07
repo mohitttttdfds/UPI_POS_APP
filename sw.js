@@ -4,10 +4,10 @@ const urlsToCache = [
   '/index.html',
   '/manifest.json',
   // You must include the paths to your icons here
-  '/icons/icon-72x72.png',
-  '/icons/icon-128x128.png',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
+  '/UPI_POS_APP/icons/icon-72x72.png',
+  '/UPI_POS_APP/icons/icon-128x128.png',
+  '/UPI_POS_APP/icons/icon-192x192.png',
+  '/UPI_POS_APP/icons/icon-512x512.png',
   // Note: External QR API (api.qrserver.com) will not be cached, which is fine.
 ];
 

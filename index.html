@@ -55,7 +55,7 @@
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
                 max-width: 90vw;
                 /* Match the width of the screen container */
-                width: min(calc(9 / 16 * 90vh), 450px); 
+                width: min(calc(9 / 16 * 92vh), 450px); /* Adjusted to match new height calc */
                 margin: 0 auto 0 auto;
                 border-radius: 12px 12px 0 0;
             }
@@ -63,8 +63,8 @@
                 /* Enforce 16:9 Aspect Ratio and limit size */
                 aspect-ratio: 9 / 16;
                 max-width: 90vw; 
-                max-height: 90vh;
-                width: min(calc(9 / 16 * 90vh), 450px); /* Adjust width based on height or max-width */
+                max-height: 92vh; /* INCREASED to utilize more vertical space (e.g., +1cm) */
+                width: min(calc(9 / 16 * 92vh), 450px); /* Adjusted width calculation based on new height */
                 height: auto;
                 margin: 0 auto;
                 border-radius: 0 0 12px 12px;
@@ -233,7 +233,8 @@
         /* Amount above QR */
         .qr-amount-display {
             font-weight: 700;
-            font-size: 1.8em;
+            /* INCREASED FONT SIZE */
+            font-size: 2.1em; 
             color: var(--primary-color);
             margin-bottom: 0;
         }
@@ -252,8 +253,8 @@
         
         /* Timer below QR */
         #timer {
-            /* Smaller font size */
-            font-size: 2.5em; 
+            /* DECREASED FONT SIZE */
+            font-size: 2.0em; 
             color: var(--secondary-color);
             margin-top: 0; 
             font-weight: bold;

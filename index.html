@@ -24,36 +24,56 @@
             margin: 0; 
             padding: 0;
             background-color: var(--background-color);
-            min-height: 100vh;
+            /* NEW: Set a fixed viewport height and hide overflow to prevent scrolling */
+            height: 100vh; 
+            overflow: hidden; 
             display: flex;
             flex-direction: column;
         }
-        
+
         .screen {
             padding: 20px;
             width: 100%;
             box-sizing: border-box;
             background-color: var(--card-background);
+            /* Use flex-grow to take up available height */
             flex-grow: 1; 
+            /* Allow internal scrolling if content overflows the fixed height */
+            overflow-y: auto; 
         }
         
+        /* --- RESPONSIVENESS AND ASPECT RATIO (16:9) --- */
         @media (min-width: 500px) {
-            .screen {
-                max-width: 450px;
-                margin: 20px auto;
-                border-radius: 12px;
-                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            body {
+                /* Centering logic for large screens */
+                justify-content: center;
+                align-items: center;
             }
             header {
-                max-width: 450px;
-                margin: 0 auto 20px auto;
-                border-radius: 12px 12px 0 0;
+                /* Style header to sit above the fixed-size screen */
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+                max-width: 90vw;
+                /* Match the width of the screen container */
+                width: min(calc(9 / 16 * 90vh), 450px); 
+                margin: 0 auto 0 auto;
+                border-radius: 12px 12px 0 0;
+            }
+            .screen {
+                /* NEW: Enforce 16:9 Aspect Ratio and limit size */
+                aspect-ratio: 9 / 16;
+                max-width: 90vw; 
+                max-height: 90vh;
+                width: min(calc(9 / 16 * 90vh), 450px); /* Adjust width based on height or max-width */
+                height: auto;
+                margin: 0 auto;
+                border-radius: 0 0 12px 12px;
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             }
         }
 
         /* --- 2. HEADER AND BUTTONS --- */
         header {
+            position: relative; 
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -62,10 +82,31 @@
             border-bottom: 1px solid #eee;
         }
 
+        /* NEW: Universal Back Button Style */
+        #universalBackButton {
+            position: absolute; 
+            left: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: var(--text-color);
+            padding: 0;
+            line-height: 1;
+            display: none; /* Hidden by default */
+        }
+
+        /* Adjust header to make space for the back button */
+        #appHeader {
+            padding-left: 50px; 
+        }
+
         h1 {
             color: var(--primary-color);
             font-size: 1.5em;
             margin: 0;
+            text-align: center; 
+            flex-grow: 1;
         }
 
         .secondary-btn {
@@ -81,7 +122,7 @@
         /* --- 3. HOME SCREEN (POS) STYLES --- */
         #amountDisplay {
             text-align: right;
-            font-size: 3em; 
+            font-size: 3em;  
             font-weight: 700;
             padding: 10px 0 20px 0;
             border-bottom: 2px solid var(--primary-color);
@@ -95,7 +136,7 @@
         .keypad-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px; 
+            gap: 8px;  
             margin-bottom: 20px;
         }
         
@@ -103,13 +144,13 @@
         .keypad-grid button {
             background-color: #f7f7f7;
             color: var(--text-color);
-            padding: 18px 0; 
+            padding: 18px 0;  
             border: 1px solid #eee;
             border-radius: 6px;
-            font-size: 1.6em; 
+            font-size: 1.6em;  
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.05s ease; /* For visual feedback */
+            transition: background-color 0.05s ease;
         }
         /* Visual Feedback Implementation */
         .keypad-grid button:active { 
@@ -126,12 +167,12 @@
         }
 
         /* Generate Button */
-        .primary-btn { 
+        .primary-btn {  
             background-color: var(--primary-color);
-            color: white; 
-            width: 100%; 
-            padding: 16px; 
-            border: none; 
+            color: white;  
+            width: 100%;  
+            padding: 16px;  
+            border: none;  
             border-radius: 6px;
             font-size: 1.2em;
             font-weight: bold;
@@ -161,7 +202,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            gap: 20px;
+            gap: 15px;
             padding: 20px 0;
         }
         
@@ -170,7 +211,7 @@
             font-weight: 700;
             font-size: 1.8em;
             color: var(--primary-color);
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         
         #qrCodeContainer img { 
@@ -181,20 +222,21 @@
         
         /* Timer below QR */
         #timer {
-            font-size: 4em; 
+            font-size: 4em;  
             color: var(--secondary-color);
-            margin-top: 10px; 
+            margin-top: 5px; 
         }
 
         #paymentDetails {
-             font-size: 1.0em; 
-             color: var(--text-color); 
-             padding: 10px; 
-             border: 1px dashed #ccc;
-             border-radius: 6px;
-             text-align: left;
-             width: 100%;
-             max-width: 250px;
+              font-size: 1.0em; 
+              color: var(--text-color); 
+              padding: 10px; 
+              border: 1px dashed #ccc;
+              border-radius: 6px;
+              text-align: left;
+              width: 100%;
+              max-width: 250px;
+              margin-bottom: 10px;
         }
         
         /* --- 5. TRANSACTION SCREEN STYLES --- */
@@ -225,6 +267,9 @@
 <body>
     
     <header id="appHeader">
+        <button id="universalBackButton" onclick="goBack()">
+            &larr;
+        </button>
         <h1>Shailey UPI POS</h1>
         <button id="txnHistoryButton" class="secondary-btn" onclick="showScreen('transaction')">
             🧾 Transactions
@@ -312,7 +357,8 @@
         const TIMEOUT_SECONDS = 90; 
         let timerInterval;
         let currentAmount = '0'; 
-        let transactions = []; 
+        let transactions = [];
+        let currentScreen = 'home'; // Track the current screen for back button logic
 
         // --- UTILITIES ---
 
@@ -416,9 +462,9 @@
         
         function clearTransactionHistory() {
             if (confirm("⚠️ WARNING: Are you sure you want to permanently delete all transaction history? This cannot be undone.")) {
-                transactions = []; // Clear the array
-                localStorage.removeItem('upi_pos_transactions'); // Clear localStorage
-                renderTransactions(); // Update the displayed list
+                transactions = []; 
+                localStorage.removeItem('upi_pos_transactions'); 
+                renderTransactions(); 
                 alert("Transaction history cleared!");
             }
         }
@@ -450,6 +496,20 @@
             });
         }
         
+        // --- NEW: BACK BUTTON LOGIC ---
+        function goBack() {
+            if (currentScreen === 'qr') {
+                // From QR Screen, go back to Home/POS
+                newTransaction(); 
+            } else if (currentScreen === 'transaction') {
+                // From Transaction History, go back to Home/POS
+                showScreen('home');
+            } else {
+                // No action if already on home screen
+                return;
+            }
+        }
+        
         // --- SCREEN AND FLOW MANAGEMENT ---
         
         function showScreen(screenId) {
@@ -464,13 +524,26 @@
 
             const targetScreen = document.getElementById(screenId + 'Screen');
             if (targetScreen) {
+                // Ensure correct flex layout for all screens
                 targetScreen.style.display = 'flex';
                 targetScreen.style.flexDirection = 'column'; 
             }
             
+            // Update current screen state
+            currentScreen = screenId; 
+            
             const txnButton = document.getElementById('txnHistoryButton');
-            txnButton.style.display = (screenId === 'home') ? 'block' : 'none';
+            const backButton = document.getElementById('universalBackButton');
 
+            // Control Visibility based on the screen
+            if (screenId === 'home') {
+                txnButton.style.display = 'block'; // Show History button on Home
+                backButton.style.display = 'none'; // Hide Back button on Home
+            } else {
+                txnButton.style.display = 'none'; // Hide History button on other screens
+                backButton.style.display = 'block'; // Show Back button on other screens
+            }
+            
             if (screenId === 'transaction') {
                 renderTransactions();
             }
@@ -553,7 +626,6 @@
             // Use the external API
             const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
 
-            // Added onerror handler for error reporting
             qrContainer.innerHTML = `<img src="${qrApiUrl}" alt="UPI QR Code" onerror="handleQrError()">`;
         }
 

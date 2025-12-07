@@ -24,7 +24,7 @@
             margin: 0; 
             padding: 0;
             background-color: var(--background-color);
-            /* NEW: Set a fixed viewport height and hide overflow to prevent scrolling */
+            /* Set a fixed viewport height and hide overflow to prevent scrolling */
             height: 100vh; 
             overflow: hidden; 
             display: flex;
@@ -32,7 +32,8 @@
         }
 
         .screen {
-            padding: 20px;
+            /* Reduced padding for compactness */
+            padding: 15px; 
             width: 100%;
             box-sizing: border-box;
             background-color: var(--card-background);
@@ -59,7 +60,7 @@
                 border-radius: 12px 12px 0 0;
             }
             .screen {
-                /* NEW: Enforce 16:9 Aspect Ratio and limit size */
+                /* Enforce 16:9 Aspect Ratio and limit size */
                 aspect-ratio: 9 / 16;
                 max-width: 90vw; 
                 max-height: 90vh;
@@ -71,18 +72,19 @@
             }
         }
 
-        /* --- 2. HEADER AND BUTTONS --- */
+        /* --- 2. HEADER AND BUTTONS (Made Slimmer) --- */
         header {
             position: relative; 
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
+            /* Reduced vertical padding */
+            padding: 10px 20px; 
             background-color: var(--card-background);
             border-bottom: 1px solid #eee;
         }
 
-        /* NEW: Universal Back Button Style */
+        /* Universal Back Button Style */
         #universalBackButton {
             position: absolute; 
             left: 10px;
@@ -93,17 +95,19 @@
             color: var(--text-color);
             padding: 0;
             line-height: 1;
-            display: none; /* Hidden by default */
+            display: none; 
         }
 
         /* Adjust header to make space for the back button */
         #appHeader {
-            padding-left: 50px; 
+            /* Adjusted padding */
+            padding-left: 45px; 
         }
 
         h1 {
             color: var(--primary-color);
-            font-size: 1.5em;
+            /* Reduced font size */
+            font-size: 1.3em;
             margin: 0;
             text-align: center; 
             flex-grow: 1;
@@ -113,21 +117,32 @@
             background-color: #6c757d;
             color: white;
             border: none;
-            padding: 8px 12px;
+            /* Reduced padding */
+            padding: 6px 10px; 
             border-radius: 5px;
             cursor: pointer;
-            font-size: 0.85em;
+            /* Smaller font */
+            font-size: 0.8em; 
         }
 
-        /* --- 3. HOME SCREEN (POS) STYLES --- */
+        /* --- 3. HOME SCREEN (Keypad Optimization) --- */
+        #homeScreen h2 {
+            font-size: 1.2em;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        
         #amountDisplay {
             text-align: right;
-            font-size: 3em;  
+            /* Reduced font size */
+            font-size: 2.5em;  
             font-weight: 700;
-            padding: 10px 0 20px 0;
+            /* Reduced vertical padding */
+            padding: 8px 0 15px 0; 
             border-bottom: 2px solid var(--primary-color);
-            margin-bottom: 20px;
-            min-height: 65px; 
+            /* Reduced margin */
+            margin-bottom: 15px; 
+            min-height: 55px; 
             line-height: 1.2;
             color: var(--text-color);
         }
@@ -136,18 +151,22 @@
         .keypad-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;  
-            margin-bottom: 20px;
+            /* Reduced gap */
+            gap: 6px;  
+            /* Reduced margin */
+            margin-bottom: 15px; 
         }
         
         /* Keypad Buttons */
         .keypad-grid button {
             background-color: #f7f7f7;
             color: var(--text-color);
-            padding: 18px 0;  
+            /* Reduced vertical padding */
+            padding: 14px 0;  
             border: 1px solid #eee;
             border-radius: 6px;
-            font-size: 1.6em;  
+            /* Reduced font size */
+            font-size: 1.4em;  
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.05s ease;
@@ -171,39 +190,44 @@
             background-color: var(--primary-color);
             color: white;  
             width: 100%;  
-            padding: 16px;  
+            /* Reduced padding */
+            padding: 14px;  
             border: none;  
             border-radius: 6px;
-            font-size: 1.2em;
+            /* Slightly smaller font */
+            font-size: 1.1em; 
             font-weight: bold;
             cursor: pointer;
         }
 
-        /* Input Group for Note */
+        /* Note Input */
         .input-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             font-weight: 600;
             color: var(--text-color);
         }
         .input-group input {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
+            /* Reduced padding */
+            padding: 8px; 
+            /* Reduced margin */
+            margin-bottom: 10px; 
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
             font-size: 1em;
         }
 
-        /* --- 4. QR SCREEN STYLES --- */
+        /* --- 4. QR SCREEN STYLES (Optimized) --- */
         #qrScreen {
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            gap: 15px;
-            padding: 20px 0;
+            /* Tighter spacing */
+            gap: 10px; 
+            padding: 15px 0; /* Reduced vertical padding */
         }
         
         /* Amount above QR */
@@ -211,32 +235,47 @@
             font-weight: 700;
             font-size: 1.8em;
             color: var(--primary-color);
-            margin-bottom: 5px;
+            margin-bottom: 0;
         }
         
+        #qrCodeContainer {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
         #qrCodeContainer img { 
-            max-width: 200px; 
+            /* Smaller QR code */
+            max-width: 180px; 
             width: 100%;
             border: 1px solid #ccc; 
         }
         
         /* Timer below QR */
         #timer {
-            font-size: 4em;  
+            /* Smaller font size */
+            font-size: 2.5em; 
             color: var(--secondary-color);
-            margin-top: 5px; 
+            margin-top: 0; 
+            font-weight: bold;
         }
 
+        /* Adjust the paragraph text above the timer */
+        #qrScreen p {
+            margin: 0; 
+            font-size: 0.9em;
+        }
+
+        /* Payment Details Box */
         #paymentDetails {
-              font-size: 1.0em; 
-              color: var(--text-color); 
-              padding: 10px; 
-              border: 1px dashed #ccc;
-              border-radius: 6px;
-              text-align: left;
-              width: 100%;
-              max-width: 250px;
-              margin-bottom: 10px;
+            font-size: 0.9em; 
+            padding: 8px; 
+            color: var(--text-color); 
+            border: 1px dashed #ccc;
+            border-radius: 6px;
+            text-align: left;
+            width: 100%;
+            max-width: 250px;
+            margin-bottom: 5px;
         }
         
         /* --- 5. TRANSACTION SCREEN STYLES --- */
@@ -246,17 +285,12 @@
             margin: 0;
         }
         #transactionList li {
-            padding: 15px 0;
+            padding: 12px 0; /* Slightly reduced padding */
             border-bottom: 1px solid #eee;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-        }
-        .txn-info span:first-child {
-            font-weight: 600;
-            color: var(--text-color);
-            display: block;
         }
         .txn-info small {
             font-size: 0.8em;
@@ -341,12 +375,6 @@
                 onclick="clearTransactionHistory()">
                 🗑️ Clear History
             </button>
-            <button 
-                class="secondary-btn" 
-                style="flex-grow: 1;" 
-                onclick="showScreen('home')">
-                ← Back to POS
-            </button>
         </div>
     </div>
 
@@ -358,7 +386,7 @@
         let timerInterval;
         let currentAmount = '0'; 
         let transactions = [];
-        let currentScreen = 'home'; // Track the current screen for back button logic
+        let currentScreen = 'home'; 
 
         // --- UTILITIES ---
 
@@ -394,7 +422,6 @@
             }
             
             const amountParts = displayValue.split('.');
-            // Handle parsing potential '0.' or just '.'
             const integerPart = amountParts[0] === '' ? '0' : amountParts[0]; 
             const integer = parseInt(integerPart, 10);
             const formattedInteger = new Intl.NumberFormat('en-IN').format(integer);
@@ -416,7 +443,6 @@
             
             if (currentAmount.includes('.') && currentAmount.split('.')[1].length >= 2) return;
             
-            // Limit integer part length to 10 digits
             if (!currentAmount.includes('.') && currentAmount.replace('.', '').length >= 10) return; 
 
             if (currentAmount === '0' && value !== '.') {
@@ -496,16 +522,13 @@
             });
         }
         
-        // --- NEW: BACK BUTTON LOGIC ---
+        // --- BACK BUTTON LOGIC ---
         function goBack() {
             if (currentScreen === 'qr') {
-                // From QR Screen, go back to Home/POS
                 newTransaction(); 
             } else if (currentScreen === 'transaction') {
-                // From Transaction History, go back to Home/POS
                 showScreen('home');
             } else {
-                // No action if already on home screen
                 return;
             }
         }
@@ -524,12 +547,10 @@
 
             const targetScreen = document.getElementById(screenId + 'Screen');
             if (targetScreen) {
-                // Ensure correct flex layout for all screens
                 targetScreen.style.display = 'flex';
                 targetScreen.style.flexDirection = 'column'; 
             }
             
-            // Update current screen state
             currentScreen = screenId; 
             
             const txnButton = document.getElementById('txnHistoryButton');
@@ -537,11 +558,11 @@
 
             // Control Visibility based on the screen
             if (screenId === 'home') {
-                txnButton.style.display = 'block'; // Show History button on Home
-                backButton.style.display = 'none'; // Hide Back button on Home
+                txnButton.style.display = 'block'; 
+                backButton.style.display = 'none'; 
             } else {
-                txnButton.style.display = 'none'; // Hide History button on other screens
-                backButton.style.display = 'block'; // Show Back button on other screens
+                txnButton.style.display = 'none'; 
+                backButton.style.display = 'block'; 
             }
             
             if (screenId === 'transaction') {
@@ -555,7 +576,7 @@
             document.getElementById('note').value = ''; 
             
             document.getElementById('qrCodeContainer').innerHTML = "<p>Generating Dynamic QR Code...</p>";
-            document.getElementById('paymentDetails').innerHTML = ""; // Clear details
+            document.getElementById('paymentDetails').innerHTML = ""; 
             showScreen('home');
         }
 
@@ -594,7 +615,6 @@
                 showScreen('qr');
                 generateQrCode(upiLink, amount);
 
-                // Enhancement: Display Merchant and Note
                 document.getElementById('paymentDetails').innerHTML = `
                     <strong>Merchant:</strong> ${YOUR_MERCHANT_NAME}<br>
                     <strong>Note:</strong> ${note || 'No Note Provided'}

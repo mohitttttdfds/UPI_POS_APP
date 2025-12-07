@@ -1,33 +1,701 @@
-/* --- RESPONSIVENESS AND ASPECT RATIO (16:9) --- */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shailey Hardware POS</title>
+    
+    <link rel="manifest" href="manifest.json">
+    
+    <meta name="theme-color" content="#28a745">
+
+    <style>
+        /* --- 1. CORE & MOBILE-FIRST STYLES --- */
+        :root {
+            --primary-color: #28a745; /* Green */
+            --primary-dark: #1e7e34; /* Darker Green for Highlighting */
+            --secondary-color: #007bff; /* Blue */
+            --background-color: #f0f2f5;
+            --card-background: #ffffff;
+            --text-color: #333;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            padding: 0;
+            background-color: var(--background-color);
+            height: 100vh; 
+            overflow: hidden; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen {
+            /* Reduced general padding for compactness */
+            padding: 15px; 
+            width: 100%;
+            box-sizing: border-box;
+            background-color: var(--card-background);
+            flex-grow: 1; 
+            overflow-y: auto; 
+        }
+        
+        /* --- 2. HEADER AND BUTTONS --- */
+        header {
+            position: relative; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            /* Standard padding restored */
+            padding: 15px 20px; 
+            background-color: var(--card-background);
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Universal Back Button Style (Prominent and Thicker) */
+        #universalBackButton {
+            position: absolute; 
+            left: 10px;
+            background: none;
+            border: none;
+            /* Increased size */
+            font-size: 2.0em; 
+            /* Maximum thickness */
+            font-weight: 900; 
+            cursor: pointer;
+            color: var(--text-color);
+            padding: 0;
+            line-height: 1;
+            display: none; 
+        }
+
+        /* Adjust header to make space for the back button */
+        #appHeader {
+            padding-left: 45px; 
+        }
+
+        h1 {
+            color: var(--primary-color);
+            /* Slightly larger title */
+            font-size: 1.5em;
+            margin: 0;
+            text-align: center; 
+            flex-grow: 1;
+        }
+
+        .secondary-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            /* Slightly larger button */
+            padding: 8px 12px; 
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em; 
+        }
+
+        /* --- RESPONSIVENESS AND ASPECT RATIO (16:9) --- */
         @media (min-width: 500px) {
-            /* ... (centering logic) ... */
+            body {
+                justify-content: center;
+                align-items: center;
+            }
             header {
-                /* Reduced max width from 450px to 380px */
-                width: 380px; 
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+                max-width: 90vw;
+                /* Compact width */
+                width: 350px; 
+                margin: 0 auto 0 auto;
                 /* Restoring standard rounded corners */
                 border-radius: 12px 12px 0 0; 
             }
             .screen {
                 /* Retaining comfortable window size */
                 max-height: 90vh; 
-                /* Reduced width from 450px to 380px */
-                width: 380px; 
+                /* Compact width */
+                width: 350px; 
+                height: auto;
+                margin: 0 auto;
                 /* Restoring standard rounded corners */
                 border-radius: 0 0 12px 12px; 
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             }
         }
 
         /* --- 3. HOME SCREEN (Keypad Optimization) --- */
+        #homeScreen h2 {
+            font-size: 1.2em;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
         
-        /* Keypad Buttons (Slightly Reduced Size for Balance) */
+        #amountDisplay {
+            text-align: right;
+            font-size: 2.5em;  
+            font-weight: 700;
+            padding: 8px 0 15px 0; 
+            border-bottom: 2px solid var(--primary-color);
+            margin-bottom: 15px; 
+            min-height: 55px; 
+            line-height: 1.2;
+            color: var(--text-color);
+        }
+        
+        /* Keypad Layout */
+        .keypad-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;  
+            margin-bottom: 15px; /* Slightly reduced margin */
+        }
+        
+        /* Keypad Buttons (Slightly Reduced Size for Compactness) */
         .keypad-grid button {
-            /* Reduced vertical padding from 20px to 16px */
-            padding: 16px 0;  
-            /* Reduced font size from 1.6em to 1.5em */
-            font-size: 1.5em;  
+            background-color: #f7f7f7;
+            color: var(--text-color);
+            /* Reduced vertical padding for compactness */
+            padding: 14px 0;  
+            border: 1px solid #eee;
+            border-radius: 6px;
+            /* Reduced font size for compactness */
+            font-size: 1.4em;  
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.05s ease;
         }
 
         .keypad-grid button.backspace-key {
-            /* Reduced font size from 1.6em to 1.5em */
-            font-size: 1.5em;
+            background-color: #dc3545;
+            color: white;
+            /* Reduced font size for compactness */
+            font-size: 1.4em;
         }
+
+        /* Input Group for Note */
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px; 
+            margin-bottom: 10px; /* Reduced margin */
+            border: 1px solid #ccc;
+            border-radius: 4-px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+
+        /* Generate Button */
+        .primary-btn {  
+            background-color: var(--primary-color);
+            color: white;  
+            width: 100%;  
+            /* Reduced vertical padding for compactness */
+            padding: 14px;  
+            border: none;  
+            border-radius: 6px;
+            /* Reduced font size for compactness */
+            font-size: 1.1em; 
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* --- 4. QR SCREEN STYLES (Optimized) --- */
+        #qrScreen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 15px; 
+            padding: 15px 0; /* Reduced vertical padding */
+        }
+        
+        /* Amount above QR */
+        .qr-amount-display {
+            font-weight: 700;
+            font-size: 2.1em; 
+            color: var(--text-color); 
+            margin-bottom: 0;
+        }
+
+        /* Class for color change when QR is active (dark green) */
+        .qr-amount-display.active {
+            color: var(--primary-dark); 
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); 
+        }
+        
+        #qrCodeContainer {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        #qrCodeContainer img { 
+            max-width: 180px; /* Reduced max QR size slightly */
+            width: 100%;
+            border: 1px solid #ccc; 
+        }
+        
+        /* Timer below QR */
+        #timer {
+            font-size: 2.0em; /* Reduced timer size slightly */
+            color: var(--secondary-color);
+            margin-top: 0; 
+            font-weight: bold;
+        }
+
+        /* Adjust the paragraph text above the timer */
+        #qrScreen p {
+            margin: 0; 
+            font-size: 0.9em;
+        }
+
+        /* Payment Details Box */
+        #paymentDetails {
+            font-size: 0.9em; 
+            padding: 8px; 
+            color: var(--text-color); 
+            border: 1px dashed #ccc;
+            border-radius: 6px;
+            text-align: left;
+            width: 100%;
+            max-width: 280px; /* Reduced max width */
+            margin-bottom: 10px;
+        }
+        
+        /* --- 5. TRANSACTION SCREEN STYLES --- */
+        #transactionList {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #transactionList li {
+            padding: 12px 0; /* Reduced padding */
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .txn-info small {
+            font-size: 0.8em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    
+    <header id="appHeader">
+        <button id="universalBackButton" onclick="goBack()">
+            &larr;
+        </button>
+        <h1>Shailey UPI POS</h1>
+        <button id="txnHistoryButton" class="secondary-btn" onclick="showScreen('transaction')">
+            🧾 Transactions
+        </button>
+    </header>
+
+    <div id="homeScreen" class="screen">
+        <h2>Enter Sale Amount</h2>
+        
+        <div id="amountDisplay">₹0</div>
+
+        <div class="input-group">
+            <label for="note">Transaction Note (Optional):</label>
+            <input type="text" id="note" placeholder="e.g., Bill No. 101" maxlength="50">
+        </div>
+
+        <div class="keypad-grid">
+            <button onclick="appendAmount('1')">1</button>
+            <button onclick="appendAmount('2')">2</button>
+            <button onclick="appendAmount('3')">3</button>
+            
+            <button onclick="appendAmount('4')">4</button>
+            <button onclick="appendAmount('5')">5</button>
+            <button onclick="appendAmount('6')">6</button>
+            
+            <button onclick="appendAmount('7')">7</button>
+            <button onclick="appendAmount('8')">8</button>
+            <button onclick="appendAmount('9')">9</button>
+            
+            <button onclick="appendAmount('.')">.</button>
+            <button onclick="appendAmount('0')">0</button>
+            <button onclick="backspaceAmount()" class="backspace-key">⌫</button>
+        </div>
+
+        <button class="primary-btn" onclick="initiateQrGeneration()">
+            ➡️ Generate QR Code
+        </button>
+    </div>
+
+    <div id="qrScreen" class="screen" style="display: none;">
+        <h2>Scan to Pay</h2>
+        
+        <div id="qrAmountDisplay" class="qr-amount-display"></div>
+        
+        <div id="qrCodeContainer">
+            <p>Generating Dynamic QR Code...</p>
+        </div>
+        
+        <p>Time remaining to complete payment:</p>
+        <div id="timer">01:30</div>
+
+        <div id="paymentDetails"></div>
+
+        <button class="primary-btn" onclick="newTransaction()">
+            ➕ New Transaction
+        </button>
+    </div>
+
+    <div id="transactionScreen" class="screen" style="display: none;">
+        <h2>Transaction History</h2>
+        
+        <ul id="transactionList">
+            </ul>
+        
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button 
+                class="secondary-btn" 
+                style="flex-grow: 1; background-color: #dc3545;" 
+                onclick="clearTransactionHistory()">
+                🗑️ Clear History
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- MERCHANT CONFIGURATION ---
+        const YOUR_UPI_ID = "Q37082898@ybl"; 
+        const YOUR_MERCHANT_NAME = "Shailey hardware";
+        const TIMEOUT_SECONDS = 90; 
+        let timerInterval;
+        let currentAmount = '0'; 
+        let transactions = [];
+        let currentScreen = 'home'; 
+
+        // --- UTILITIES ---
+
+        function formatIndianRupees(num) {
+            const amount = typeof num === 'string' ? parseFloat(num) : num;
+            if (isNaN(amount)) return '₹0.00';
+            
+            const formatter = new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                minimumFractionDigits: 2,
+            });
+            return formatter.format(amount);
+        }
+
+        // --- KEYPAD INPUT LOGIC ---
+
+        function updateDisplay() {
+            const display = document.getElementById('amountDisplay');
+            let displayValue = currentAmount;
+
+            if (displayValue === '' || displayValue === '0') {
+                display.textContent = '₹0';
+                return;
+            }
+
+            if (displayValue.includes('.')) {
+                const parts = displayValue.split('.');
+                if (parts[1] && parts[1].length > 2) {
+                    displayValue = parts[0] + '.' + parts[1].substring(0, 2);
+                    currentAmount = displayValue;
+                }
+            }
+            
+            const amountParts = displayValue.split('.');
+            const integerPart = amountParts[0] === '' ? '0' : amountParts[0]; 
+            const integer = parseInt(integerPart, 10);
+            const formattedInteger = new Intl.NumberFormat('en-IN').format(integer);
+
+            let formatted = `₹${formattedInteger}`;
+            if (amountParts.length > 1) {
+                formatted += `.${amountParts[1]}`;
+            } else if (displayValue.endsWith('.') && amountParts.length === 1) {
+                 formatted += '.';
+            }
+
+            display.textContent = formatted;
+        }
+
+        function appendAmount(value) {
+            if (value === '.') {
+                if (currentAmount.includes('.')) return;
+            }
+            
+            if (currentAmount.includes('.') && currentAmount.split('.')[1].length >= 2) return;
+            
+            if (!currentAmount.includes('.') && currentAmount.replace('.', '').length >= 10) return; 
+
+            if (currentAmount === '0' && value !== '.') {
+                currentAmount = value;
+            } else if (currentAmount === '' && value === '.') {
+                currentAmount = '0.';
+            } else if (currentAmount === '0' && value === '0' && !currentAmount.includes('.')) {
+                return;
+            } else {
+                currentAmount += value;
+            }
+            updateDisplay();
+        }
+
+        function backspaceAmount() {
+            currentAmount = currentAmount.slice(0, -1);
+            if (currentAmount === '') {
+                currentAmount = '0'; 
+            }
+            updateDisplay();
+        }
+
+        // --- TRANSACTION LOGGING & HISTORY ---
+
+        function loadTransactions() {
+            const saved = localStorage.getItem('upi_pos_transactions');
+            if (saved) {
+                transactions = JSON.parse(saved);
+            }
+        }
+
+        function saveTransaction(amount, note, timestamp) {
+            const newTxn = {
+                id: Date.now(),
+                amount: parseFloat(amount).toFixed(2), 
+                note: note || 'No note',
+                timestamp: timestamp,
+                status: 'Logged',
+            };
+            transactions.unshift(newTxn); 
+            localStorage.setItem('upi_pos_transactions', JSON.stringify(transactions));
+        }
+        
+        function clearTransactionHistory() {
+            if (confirm("⚠️ WARNING: Are you sure you want to permanently delete all transaction history? This cannot be undone.")) {
+                transactions = []; 
+                localStorage.removeItem('upi_pos_transactions'); 
+                renderTransactions(); 
+                alert("Transaction history cleared!");
+            }
+        }
+
+        function renderTransactions() {
+            const list = document.getElementById('transactionList');
+            list.innerHTML = ''; 
+
+            if (transactions.length === 0) {
+                list.innerHTML = `<li style="justify-content: center; color: #777;">No transactions logged yet.</li>`;
+                return;
+            }
+
+            transactions.forEach(txn => {
+                const li = document.createElement('li');
+                const formattedAmount = formatIndianRupees(txn.amount);
+                
+                const date = new Date(txn.timestamp).toLocaleString('en-IN', {
+                    hour: '2-digit', minute: '2-digit', year: 'numeric', month: 'short', day: '2-digit'
+                });
+                
+                li.innerHTML = `
+                    <div class="txn-info">
+                        <span>${formattedAmount} (${txn.note})</span>
+                        <small>${date}</small>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+        }
+        
+        // --- BACK BUTTON LOGIC ---
+        function goBack() {
+            if (currentScreen === 'qr') {
+                newTransaction(); 
+            } else if (currentScreen === 'transaction') {
+                showScreen('home');
+            } else {
+                return;
+            }
+        }
+        
+        // --- SCREEN AND FLOW MANAGEMENT ---
+        
+        function showScreen(screenId) {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.style.display = 'none';
+            });
+
+            const targetScreen = document.getElementById(screenId + 'Screen');
+            if (targetScreen) {
+                targetScreen.style.display = 'flex';
+                targetScreen.style.flexDirection = 'column'; 
+            }
+            
+            currentScreen = screenId; 
+            
+            const txnButton = document.getElementById('txnHistoryButton');
+            const backButton = document.getElementById('universalBackButton');
+
+            // Control Visibility based on the screen
+            if (screenId === 'home') {
+                txnButton.style.display = 'block'; 
+                backButton.style.display = 'none'; 
+                document.getElementById('qrAmountDisplay').classList.remove('active'); // Reset color
+            } else {
+                txnButton.style.display = 'none'; 
+                backButton.style.display = 'block'; 
+            }
+            
+            if (screenId === 'transaction') {
+                renderTransactions();
+            }
+        }
+
+        function newTransaction() {
+            currentAmount = '0';
+            updateDisplay();
+            document.getElementById('note').value = ''; 
+            
+            document.getElementById('qrCodeContainer').innerHTML = "<p>Generating Dynamic QR Code...</p>";
+            document.getElementById('paymentDetails').innerHTML = ""; 
+            
+            // Ensures color is reset when going home
+            document.getElementById('qrAmountDisplay').classList.remove('active');
+            
+            showScreen('home');
+        }
+
+        // --- QR CODE GENERATION LOGIC ---
+
+        function createUpiDeepLink(amountString, note) {
+            const finalAmount = parseFloat(amountString);
+            
+            if (isNaN(finalAmount) || finalAmount <= 0) {
+                alert("Please enter a valid amount greater than zero.");
+                return null;
+            }
+            if (!YOUR_UPI_ID.includes('@')) {
+                alert("CRITICAL ERROR: Please fix the UPI ID in the script. It must contain the '@' handle.");
+                return null;
+            }
+            
+            const amountFormatted = finalAmount.toFixed(2);
+            const payeeNameEncoded = encodeURIComponent(YOUR_MERCHANT_NAME);
+            const noteEncoded = encodeURIComponent(note.substring(0, 80)); 
+            
+            const upiLink = `upi://pay?pa=${YOUR_UPI_ID}&pn=${payeeNameEncoded}&am=${amountFormatted}&cu=INR&tn=${noteEncoded}`;
+            
+            return upiLink;
+        }
+
+        function initiateQrGeneration() {
+            const amount = currentAmount; 
+            const note = document.getElementById('note').value;
+            const upiLink = createUpiDeepLink(amount, note);
+
+            if (upiLink) {
+                const timestamp = new Date().toISOString();
+                saveTransaction(amount, note, timestamp); 
+                
+                showScreen('qr');
+                generateQrCode(upiLink, amount);
+
+                // ADD ACTIVE CLASS to change amount color
+                document.getElementById('qrAmountDisplay').classList.add('active'); 
+                
+                document.getElementById('paymentDetails').innerHTML = `
+                    <strong>Merchant:</strong> ${YOUR_MERCHANT_NAME}<br>
+                    <strong>Note:</strong> ${note || 'No Note Provided'}
+                `;
+                startCountdown();
+            }
+        }
+
+        function handleQrError() {
+            const qrContainer = document.getElementById('qrCodeContainer');
+            qrContainer.innerHTML = `
+                <p style="color: #dc3545; font-weight: bold;">
+                    ❌ Error: QR Code failed to load. 
+                </p>
+                <p>Please check your internet connection or try a new transaction.</p>
+            `;
+            alert("QR Code API Error. Please check connection.");
+            clearInterval(timerInterval);
+            timerInterval = null;
+            document.getElementById('qrAmountDisplay').classList.remove('active');
+        }
+
+        function generateQrCode(upiLink, amount) {
+            const qrContainer = document.getElementById('qrCodeContainer');
+            const qrAmountDisplay = document.getElementById('qrAmountDisplay');
+            const formattedAmount = formatIndianRupees(amount);
+
+            qrAmountDisplay.textContent = formattedAmount; 
+
+            // Use the external API
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
+
+            qrContainer.innerHTML = `<img src="${qrApiUrl}" alt="UPI QR Code" onerror="handleQrError()">`;
+        }
+
+        // --- TIMER LOGIC ---
+
+        function startCountdown() {
+            let timeRemaining = TIMEOUT_SECONDS;
+            const timerElement = document.getElementById('timer');
+            
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+
+            function updateTimer() {
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                
+                timerElement.textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Payment window expired. Please initiate a new transaction.");
+                    newTransaction(); 
+                } else {
+                    timeRemaining--;
+                }
+            }
+
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        // Initialize the app & Register Service Worker (PWA)
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTransactions(); 
+            updateDisplay();
+            showScreen('home');
+
+            // --- PWA Service Worker Registration ---
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    // Requires sw.js file to be present in the root directory
+                    navigator.serviceWorker.register('sw.js') 
+                        .then(registration => {
+                            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                        }, error => {
+                            console.log('ServiceWorker registration failed: ', error);
+                        });
+                });
+            }
+            // ----------------------------------------
+        });
+    </script>
+</body>
+</html>

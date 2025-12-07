@@ -597,7 +597,7 @@
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
                     // Requires sw.js file to be present in the root directory
-                    navigator.serviceWorker.register('/sw.js') 
+                    navigator.serviceWorker.register('sw.js') 
                         .then(registration => {
                             console.log('ServiceWorker registration successful with scope: ', registration.scope);
                         }, error => {

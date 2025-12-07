@@ -98,19 +98,19 @@
             header {
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
                 max-width: 90vw;
-                /* Drastically increased max-height */
-                width: min(calc(9 / 16 * 99vh), 450px); 
+                /* Adjusted width calculation based on 100vh */
+                width: min(calc(9 / 16 * 100vh), 450px); 
                 margin: 0 auto 0 auto;
-                border-radius: 12px 12px 0 0;
+                border-radius: 0; /* Removed top border radius */
             }
             .screen {
                 aspect-ratio: 9 / 16;
                 max-width: 90vw; 
-                max-height: 99vh; /* DRIVEN TO MAX VH */
-                width: min(calc(9 / 16 * 99vh), 450px); 
+                max-height: 100vh; /* MAX VH for full screen height */
+                width: min(calc(9 / 16 * 100vh), 450px); 
                 height: auto;
                 margin: 0 auto;
-                border-radius: 0 0 12px 12px;
+                border-radius: 0; /* Removed bottom border radius */
                 box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
             }
         }
@@ -209,10 +209,9 @@
             margin-bottom: 0;
         }
 
-        /* Class for color change when QR is active (changed to dark green) */
+        /* Class for color change when QR is active (dark green) */
         .qr-amount-display.active {
             color: var(--primary-dark); 
-            /* Added a subtle shadow for extra stand-out */
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); 
         }
         

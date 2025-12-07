@@ -1,23 +1,27 @@
 const CACHE_NAME = 'shailey-pos-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  // You must include the paths to your icons here
+  // --- CORE FILES: MUST be prefixed with the repository name ---
+  '/UPI_POS_APP/',
+  '/UPI_POS_APP/index.html',
+  '/UPI_POS_APP/manifest.json',
+  
+  // --- ICON FILES: MUST be prefixed with the repository name ---
   '/UPI_POS_APP/icons/icon-72x72.png',
   '/UPI_POS_APP/icons/icon-128x128.png',
   '/UPI_POS_APP/icons/icon-192x192.png',
   '/UPI_POS_APP/icons/icon-512x512.png',
-  // Note: External QR API (api.qrserver.com) will not be cached, which is fine.
 ];
 
 // 1. Install Event: Caches all static assets
 self.addEventListener('install', event => {
+  console.log('Service Worker: Installing...');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
+        console.log('Service Worker: Caching assets');
+        return cache.addAll(urlsToCache).catch(error => {
+            console.error('Service Worker failed to cache some assets:', error);
+        });
       })
   );
 });
@@ -39,16 +43,20 @@ self.addEventListener('fetch', event => {
 
 // 3. Activate Event: Cleans up old caches
 self.addEventListener('activate', event => {
+  console.log('Service Worker: Activating...');
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
+            console.log('Service Worker: Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
     })
   );
+  // Ensure the Service Worker takes control immediately
+  return self.clients.claim();
 });

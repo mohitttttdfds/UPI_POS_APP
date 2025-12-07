@@ -108,15 +108,15 @@
             header {
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
                 max-width: 90vw;
-                width: min(calc(9 / 16 * 95vh), 450px); /* Adjusted to match new height calc */
+                width: min(calc(9 / 16 * 98vh), 450px); /* Adjusted to match new height calc */
                 margin: 0 auto 0 auto;
                 border-radius: 12px 12px 0 0;
             }
             .screen {
                 aspect-ratio: 9 / 16;
                 max-width: 90vw; 
-                max-height: 95vh; /* INCREASED to utilize more vertical space */
-                width: min(calc(9 / 16 * 95vh), 450px); /* Adjusted width calculation based on new height */
+                max-height: 98vh; /* INCREASED to utilize maximum vertical space */
+                width: min(calc(9 / 16 * 98vh), 450px); /* Adjusted width calculation based on new height */
                 height: auto;
                 margin: 0 auto;
                 border-radius: 0 0 12px 12px;
@@ -213,13 +213,12 @@
         /* Amount above QR */
         .qr-amount-display {
             font-weight: 700;
-            /* INCREASED FONT SIZE */
             font-size: 2.1em; 
-            color: var(--text-color); /* Default text color */
+            color: var(--text-color); 
             margin-bottom: 0;
         }
 
-        /* NEW: Class for color change when QR is active */
+        /* Class for color change when QR is active */
         .qr-amount-display.active {
             color: var(--primary-color);
         }
@@ -237,7 +236,6 @@
         
         /* Timer below QR */
         #timer {
-            /* DECREASED FONT SIZE */
             font-size: 2.0em; 
             color: var(--secondary-color);
             margin-top: 0; 

@@ -43,35 +43,6 @@
             overflow-y: auto; 
         }
         
-        /* --- RESPONSIVENESS AND ASPECT RATIO (16:9) --- */
-        @media (min-width: 500px) {
-            body {
-                /* Centering logic for large screens */
-                justify-content: center;
-                align-items: center;
-            }
-            header {
-                /* Style header to sit above the fixed-size screen */
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-                max-width: 90vw;
-                /* Match the width of the screen container */
-                width: min(calc(9 / 16 * 92vh), 450px); /* Adjusted to match new height calc */
-                margin: 0 auto 0 auto;
-                border-radius: 12px 12px 0 0;
-            }
-            .screen {
-                /* Enforce 16:9 Aspect Ratio and limit size */
-                aspect-ratio: 9 / 16;
-                max-width: 90vw; 
-                max-height: 92vh; /* INCREASED to utilize more vertical space (e.g., +1cm) */
-                width: min(calc(9 / 16 * 92vh), 450px); /* Adjusted width calculation based on new height */
-                height: auto;
-                margin: 0 auto;
-                border-radius: 0 0 12px 12px;
-                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            }
-        }
-
         /* --- 2. HEADER AND BUTTONS (Made Slimmer) --- */
         header {
             position: relative; 
@@ -84,13 +55,15 @@
             border-bottom: 1px solid #eee;
         }
 
-        /* Universal Back Button Style */
+        /* Universal Back Button Style (Made Prominent) */
         #universalBackButton {
             position: absolute; 
             left: 10px;
             background: none;
             border: none;
-            font-size: 1.5em;
+            /* INCREASED FONT SIZE and WEIGHT for prominence */
+            font-size: 1.8em; 
+            font-weight: 900; 
             cursor: pointer;
             color: var(--text-color);
             padding: 0;
@@ -125,6 +98,32 @@
             font-size: 0.8em; 
         }
 
+        /* --- RESPONSIVENESS AND ASPECT RATIO (16:9) --- */
+        @media (min-width: 500px) {
+            body {
+                /* Centering logic for large screens */
+                justify-content: center;
+                align-items: center;
+            }
+            header {
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+                max-width: 90vw;
+                width: min(calc(9 / 16 * 95vh), 450px); /* Adjusted to match new height calc */
+                margin: 0 auto 0 auto;
+                border-radius: 12px 12px 0 0;
+            }
+            .screen {
+                aspect-ratio: 9 / 16;
+                max-width: 90vw; 
+                max-height: 95vh; /* INCREASED to utilize more vertical space */
+                width: min(calc(9 / 16 * 95vh), 450px); /* Adjusted width calculation based on new height */
+                height: auto;
+                margin: 0 auto;
+                border-radius: 0 0 12px 12px;
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            }
+        }
+
         /* --- 3. HOME SCREEN (Keypad Optimization) --- */
         #homeScreen h2 {
             font-size: 1.2em;
@@ -134,13 +133,10 @@
         
         #amountDisplay {
             text-align: right;
-            /* Reduced font size */
             font-size: 2.5em;  
             font-weight: 700;
-            /* Reduced vertical padding */
             padding: 8px 0 15px 0; 
             border-bottom: 2px solid var(--primary-color);
-            /* Reduced margin */
             margin-bottom: 15px; 
             min-height: 55px; 
             line-height: 1.2;
@@ -151,9 +147,7 @@
         .keypad-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            /* Reduced gap */
             gap: 6px;  
-            /* Reduced margin */
             margin-bottom: 15px; 
         }
         
@@ -161,19 +155,13 @@
         .keypad-grid button {
             background-color: #f7f7f7;
             color: var(--text-color);
-            /* Reduced vertical padding */
             padding: 14px 0;  
             border: 1px solid #eee;
             border-radius: 6px;
-            /* Reduced font size */
             font-size: 1.4em;  
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.05s ease;
-        }
-        /* Visual Feedback Implementation */
-        .keypad-grid button:active { 
-            background-color: #e0e0e0;
         }
 
         .keypad-grid button.backspace-key {
@@ -181,26 +169,8 @@
             color: white;
             font-size: 1.4em;
         }
-        .keypad-grid button.backspace-key:active {
-            background-color: #c82333;
-        }
 
-        /* Generate Button */
-        .primary-btn {  
-            background-color: var(--primary-color);
-            color: white;  
-            width: 100%;  
-            /* Reduced padding */
-            padding: 14px;  
-            border: none;  
-            border-radius: 6px;
-            /* Slightly smaller font */
-            font-size: 1.1em; 
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Note Input */
+        /* Input Group for Note */
         .input-group label {
             display: block;
             margin-bottom: 3px;
@@ -209,14 +179,25 @@
         }
         .input-group input {
             width: 100%;
-            /* Reduced padding */
             padding: 8px; 
-            /* Reduced margin */
             margin-bottom: 10px; 
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
             font-size: 1em;
+        }
+
+        /* Generate Button */
+        .primary-btn {  
+            background-color: var(--primary-color);
+            color: white;  
+            width: 100%;  
+            padding: 14px;  
+            border: none;  
+            border-radius: 6px;
+            font-size: 1.1em; 
+            font-weight: bold;
+            cursor: pointer;
         }
 
         /* --- 4. QR SCREEN STYLES (Optimized) --- */
@@ -225,9 +206,8 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            /* Tighter spacing */
             gap: 10px; 
-            padding: 15px 0; /* Reduced vertical padding */
+            padding: 15px 0; 
         }
         
         /* Amount above QR */
@@ -235,8 +215,13 @@
             font-weight: 700;
             /* INCREASED FONT SIZE */
             font-size: 2.1em; 
-            color: var(--primary-color);
+            color: var(--text-color); /* Default text color */
             margin-bottom: 0;
+        }
+
+        /* NEW: Class for color change when QR is active */
+        .qr-amount-display.active {
+            color: var(--primary-color);
         }
         
         #qrCodeContainer {
@@ -245,7 +230,6 @@
         }
 
         #qrCodeContainer img { 
-            /* Smaller QR code */
             max-width: 180px; 
             width: 100%;
             border: 1px solid #ccc; 
@@ -286,7 +270,7 @@
             margin: 0;
         }
         #transactionList li {
-            padding: 12px 0; /* Slightly reduced padding */
+            padding: 12px 0; 
             border-bottom: 1px solid #eee;
             display: flex;
             justify-content: space-between;
@@ -561,6 +545,7 @@
             if (screenId === 'home') {
                 txnButton.style.display = 'block'; 
                 backButton.style.display = 'none'; 
+                document.getElementById('qrAmountDisplay').classList.remove('active'); // Reset color
             } else {
                 txnButton.style.display = 'none'; 
                 backButton.style.display = 'block'; 
@@ -578,6 +563,10 @@
             
             document.getElementById('qrCodeContainer').innerHTML = "<p>Generating Dynamic QR Code...</p>";
             document.getElementById('paymentDetails').innerHTML = ""; 
+            
+            // Ensures color is reset when going home
+            document.getElementById('qrAmountDisplay').classList.remove('active');
+            
             showScreen('home');
         }
 
@@ -616,6 +605,9 @@
                 showScreen('qr');
                 generateQrCode(upiLink, amount);
 
+                // ADD ACTIVE CLASS to change amount color
+                document.getElementById('qrAmountDisplay').classList.add('active'); 
+                
                 document.getElementById('paymentDetails').innerHTML = `
                     <strong>Merchant:</strong> ${YOUR_MERCHANT_NAME}<br>
                     <strong>Note:</strong> ${note || 'No Note Provided'}
@@ -635,6 +627,7 @@
             alert("QR Code API Error. Please check connection.");
             clearInterval(timerInterval);
             timerInterval = null;
+            document.getElementById('qrAmountDisplay').classList.remove('active');
         }
 
         function generateQrCode(upiLink, amount) {
